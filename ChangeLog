@@ -1,0 +1,48 @@
+Version 0.1 (7/12/2004):
+	- version with full functional curves
+
+Version 0.2 (20/02/2005):
+	- version with triangulated surface example
+
+Version 1.0 (16/05/2006):
+	- released version
+
+Version 1.1 (22/10/2007):
+	- version with full functional surfaces
+
+Version 1.2 (11/11/2007):
+	- multiple bugfixes
+	- FLTK-based GUI
+	- sophisticated examples
+	- triangulated volume example
+
+Version 1.3 (30/11/2007):
+	- bugfixes in interface
+	- improved volume triangulation
+	- new plot style for volumes
+	- user-defined surface transparency
+
+Version 1.4 (25/12/2007):
+	- multiple windows
+	- fps counter
+	- on-screen labels
+
+Version 1.5 (25/01/2008):
+	- improved lighting
+	- optimized surface normals
+	- improved transparency drawing
+
+Version 1.6 (17/03/2008):
+	- user-defined clipping planes
+	- bugfixes in interface
+
+Version 1.7 (3/10/2008):
+	- user-defined curve transparency
+	- references to graphics in plot
+
+Version 1.8 (16/11/2010):
+	- warnings instead exits
+
+Version 1.9 (12/04/2011):
+	- VS project files
+	- bugfixes

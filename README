@@ -1,0 +1,14 @@
+Gluplot is a data plotting package. It was originally intended 
+both as graphical library and as standalone program which would 
+allow scientists and students to visualize data. 
+(The "GLU" in gluplot means that it is OpenGL/GLU/glut based.) 
+Gluplot handles both curves (2D) and surfaces (3D). For 2D plots, 
+there are many plot styles, including lines, points, lines with 
+points, error bars and impulses. Surfaces are plotted as a color 
+map on the x-y plane. 
+Gluplot supplies both linear and logarithmic axes. Moreover, 
+any other axis distortion is available using gluplot library. 
+Axis scale and also many other settings are changeable by gluplot 
+command-line options or by menu items and hot-keys after it runs. 
+After all, gluplot supports high quality plot output to PostScript (PS), 
+Encapsulated PostScript (EPS) and Portable Document Format (PDF) files.

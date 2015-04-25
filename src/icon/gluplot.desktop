@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=gluplot
+Comment=The Gluplot Plotting Package
+TryExec=gluplot
+Exec=gluplot
+Icon=gluplot.xpm
+Terminal=false
+Type=Application
+Encoding=UTF-8
+Categories=Application

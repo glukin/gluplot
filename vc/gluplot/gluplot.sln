@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gluplot.lib", "gluplot.lib\gluplot.lib.vcproj", "{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gluplot", "gluplot\gluplot.vcproj", "{1B7E824C-11C4-43B0-854E-1ABFFE1BC38A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5} = {7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "surface", "test\surface\surface.vcproj", "{48BDF310-8E24-416E-9F07-43D6D375AA8E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5} = {7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sphere", "test\sphere\sphere.vcproj", "{51E2F39E-29DB-4892-98A7-5544C91EBF78}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5} = {7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parzen_1D", "test\parzen_1D\parzen_1D.vcproj", "{17ABD7F8-FDC8-4042-8120-C8EF630B0372}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5} = {7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "parzen_2D", "test\parzen_2D\parzen_2D.vcproj", "{458E2A96-7B61-4C75-883D-0A65A218B80D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5} = {7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}.Debug|Win32.Build.0 = Debug|Win32
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}.Release|Win32.ActiveCfg = Release|Win32
+		{7DC6D2A1-0FAC-4122-B795-B70B1E26CDE5}.Release|Win32.Build.0 = Release|Win32
+		{1B7E824C-11C4-43B0-854E-1ABFFE1BC38A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1B7E824C-11C4-43B0-854E-1ABFFE1BC38A}.Debug|Win32.Build.0 = Debug|Win32
+		{1B7E824C-11C4-43B0-854E-1ABFFE1BC38A}.Release|Win32.ActiveCfg = Release|Win32
+		{1B7E824C-11C4-43B0-854E-1ABFFE1BC38A}.Release|Win32.Build.0 = Release|Win32
+		{48BDF310-8E24-416E-9F07-43D6D375AA8E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{48BDF310-8E24-416E-9F07-43D6D375AA8E}.Debug|Win32.Build.0 = Debug|Win32
+		{48BDF310-8E24-416E-9F07-43D6D375AA8E}.Release|Win32.ActiveCfg = Release|Win32
+		{48BDF310-8E24-416E-9F07-43D6D375AA8E}.Release|Win32.Build.0 = Release|Win32
+		{51E2F39E-29DB-4892-98A7-5544C91EBF78}.Debug|Win32.ActiveCfg = Debug|Win32
+		{51E2F39E-29DB-4892-98A7-5544C91EBF78}.Debug|Win32.Build.0 = Debug|Win32
+		{51E2F39E-29DB-4892-98A7-5544C91EBF78}.Release|Win32.ActiveCfg = Release|Win32
+		{51E2F39E-29DB-4892-98A7-5544C91EBF78}.Release|Win32.Build.0 = Release|Win32
+		{17ABD7F8-FDC8-4042-8120-C8EF630B0372}.Debug|Win32.ActiveCfg = Debug|Win32
+		{17ABD7F8-FDC8-4042-8120-C8EF630B0372}.Debug|Win32.Build.0 = Debug|Win32
+		{17ABD7F8-FDC8-4042-8120-C8EF630B0372}.Release|Win32.ActiveCfg = Release|Win32
+		{17ABD7F8-FDC8-4042-8120-C8EF630B0372}.Release|Win32.Build.0 = Release|Win32
+		{458E2A96-7B61-4C75-883D-0A65A218B80D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{458E2A96-7B61-4C75-883D-0A65A218B80D}.Debug|Win32.Build.0 = Debug|Win32
+		{458E2A96-7B61-4C75-883D-0A65A218B80D}.Release|Win32.ActiveCfg = Release|Win32
+		{458E2A96-7B61-4C75-883D-0A65A218B80D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,109 @@
+\setVersion{1.6}
+\setDate{2008/03/17}
+
+\begin{Name}{1}{gluplot}{Alexei Soloviev}{The Gluplot Plotting Package}{The Gluplot Plotting Package}
+
+\Prog{Gluplot} is a data plotting package. It was originally intended 
+both as graphical library and as standalone program which would 
+allow scientists and students to visualize data. 
+(The "GLU" in gluplot means that it is OpenGL/GLU/glut based.) 
+Gluplot handles both curves (2D) and surfaces (3D). For 2D plots, 
+there are many plot styles, including lines, points, lines with 
+points, error bars and impulses. Surfaces are plotted as a color 
+map on the x-y plane. 
+Gluplot supplies both linear and logarithmic axes. Moreover, 
+any other axis distortion is available using gluplot library. 
+Axis scale and also many other settings are changeable by gluplot 
+command-line options or by menu items and hot-keys after it runs. 
+After all, gluplot supports high quality plot output to PostScript (PS), 
+Encapsulated PostScript (EPS) and Portable Document Format (PDF) files. 
+\end{Name}
+
+
+\section{SYNOPSIS}
+%%%%%%%%%%%%%%%%%%
+
+\Prog{gluplot}
+\oOpt{-x}
+\oOpt{-y}
+\oOpt{-z}
+\oOpt{-t}
+\oOpt{-g}
+\oOpt{-k}
+\oOpt{-b}
+\oOptArg{-p}{ name}
+\oOpt{-n}
+\oOptArg{-f}{ name}
+\oOptArg{-c}{ name}
+\oOptArg{-u}{ string}
+\oOptArg{-w}{ string}
+\oOptArg{-s}{ string}
+\oOpt{-3}
+\oOpt{-v}
+\oOptArg{-a}{ value}
+\oOptArg{-o}{ file}
+\Arg{file}
+
+\Prog{gluplot}
+\oOpt{-h}
+\oOpt{-V}
+
+
+\section{OPTIONS}
+%%%%%%%%%%%%%%%%%
+
+\subsection{COMMON OPTIONS}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{Description}
+
+\item[\Opt{-x}, \Opt{--xlog}] set logarithmic scale for x-axis [linear]
+\item[\Opt{-y}, \Opt{--ylog}] set logarithmic scale for y-axis [linear]
+\item[\Opt{-z}, \Opt{--zlog}] set logarithmic scale for z-axis [linear]
+\item[\Opt{-t}, \Opt{--no-ticks}] hide axis ticks [no]
+\item[\Opt{-g}, \Opt{--grid}] show grid [no]
+\item[\Opt{-k}, \Opt{--key}] show palette key [no]
+\item[\Opt{-b}, \Opt{--black}] set background black [white]
+\item[\Opt{-p}, \OptArg{--palette}{ name}]  set color palette [rainbow]
+\item[\Opt{-n}, \Opt{--negative}] invert palette [no]
+\item[\Opt{-f}, \OptArg{--font}{ name}] set labels font [helvetica-12]
+\item[\Opt{-c}, \OptArg{--clip}{ name}] set clipping plane [none]
+
+\end{Description}
+
+\subsection{PLOT OPTIONS}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{Description}
+
+\item[\Opt{-u}, \OptArg{--using}{ string}] set columns in file for plot [1:2]
+\item[\Opt{-w}, \OptArg{--with}{ string}] set plot style [lines]
+\item[\Opt{-s}, \OptArg{--slice }{ string}] set lines in file for plot (from:to:stride) [all]
+\item[\Opt{-3}, \Opt{--3D}] perform 3D plot [no]
+\item[\Opt{-v}, \Opt{--volume}] show volume in 3D plot [surface]
+\item[\Opt{-a}, \OptArg{--alpha }{ value}] set surface transparency [1.0]
+
+\end{Description}
+
+\subsection{OUTPUT OPTIONS}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{Description}
+
+\item[\Opt{-o}, \OptArg{--output}{ file}] output plot to file in EPS format [GLUT window]
+
+\end{Description}
+
+
+\subsection{HELP OPTIONS}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{Description}
+
+\item[\Opt{-h}, \Opt{--help }] display this help and exit
+\item[\Opt{-V}, \Opt{--version}] display version information and exit
+
+\end{Description}
+
+
+\LatexManEnd

@@ -1,0 +1,276 @@
+<!doctype linuxdoc system>
+<article>
+<title>The Gluplot Plotting Package
+<author><htmlurl url="mailto:solovjev@cv.jinr.ru" name = "Alexei Soloviev">
+<date>Version 1.6
+<abstract>
+Gluplot is a data plotting package. It was originally intended 
+both as graphical library and as standalone program which would 
+allow scientists and students to visualize data. 
+(The "GLU" in gluplot means that it is OpenGL/GLU/glut based.) 
+Gluplot handles both curves (2D) and surfaces (3D). For 2D plots, 
+there are many plot styles, including lines, points, lines with 
+points, error bars and impulses. Surfaces are plotted as a color 
+map on the x-y plane. 
+Gluplot supplies both linear and logarithmic axes. Moreover, 
+any other axis distortion is available using gluplot library. 
+Axis scale and also many other settings are changeable by gluplot 
+command-line options or by menu items and hot-keys after it runs. 
+After all, gluplot supports high quality plot output to PostScript (PS), 
+Encapsulated PostScript (EPS) and Portable Document Format (PDF) files.
+</abstract>
+
+<toc>
+
+<sect>Basis
+
+<p>
+Yes, it is the clone of famous 
+<htmlurl url="http://www.gnuplot.info/" name="gnuplot"> 
+plotting utility.
+But there are some features. 
+
+<p>
+First of all, <tt>gluplot</tt> is OpenGL/GLU/glut based, as seen from its name. 
+Thus, it produces high quality plots due to 
+<htmlurl url="http://www.opengl.org" name="OpenGL"> facilities. 
+<Tt>Gluplot</Tt> also uses 
+<htmlurl url="http://www.geuz.org/gl2ps" name="GL2PS"> 
+library included in its distribution to produce output to PostScript (PS), 
+Encapsulated PostScript (EPS) or Portable Document Format (PDF) files.
+
+<p>
+Second and most pleasant <tt>gluplot</tt> feature is a possibility using it as 
+a library of C++ classes. 
+And in this way it is more flexible than standalone utility. 
+
+<p>
+Third, <tt>gluplot</tt> provides excellent gnuplot-like auto-scaling for its axes. 
+Moreover, it supplies any user-defined axis distortions, including 
+linear and logarithmic ones of course. 
+
+<p>
+Finally, <tt>gluplot</tt> is able performing true scatter plots due to triangulation. 
+By default, any surface without mesh is triangulated by <tt>gluplot</tt>. 
+Thus, user can forget about it. 
+
+<sect>Installation
+
+<p>
+In order to compile and install <tt>gluplot</tt> on your system, type the following in
+the base directory of the <tt>gluplot</tt> distribution:
+
+<tscreen><verb>
+% ./configure
+% make
+% make install
+</verb></tscreen>
+
+To build <tt>gluplot</tt> with GUI you should install 
+<htmlurl url="http://www.fltk.org" name="FLTK"> 
+first. 
+Second, you should enable using FLTK libraries while <tt>gluplot</tt> configuring: 
+
+<tscreen><verb>
+% ./configure --enable-fltk
+</verb></tscreen>
+
+<p>
+Since <tt>gluplot</tt> uses autoconf you should have not trouble 
+compiling it. 
+Should you run into problems please report them to the 
+<htmlurl url="mailto:solovjev@cv.jinr.ru" name = "author">.
+
+<sect>Usage
+
+<p>
+As was mentioned above, <tt>gluplot</tt> is usable it two ways. 
+First, it is a console data plotting utility and is driven by command-line 
+options. 
+On the other hand, one can use <tt>gluplot</tt> API in his own C++ project.
+
+<sect1>Options
+
+<p>
+The new <tt>gluplot</tt> user should begin by reading the general information 
+available by running <tt>gluplot</tt> with '--help' option. 
+
+<tscreen><verb>
+Usage: gluplot [options] [plot options] <file>
+Options: [defaults in brackets after descriptions]
+Common options:
+  -x, --xlog            set logarithmic scale for x-axis [linear]
+  -y, --ylog            set logarithmic scale for y-axis [linear]
+  -z, --zlog            set logarithmic scale for z-axis [linear]
+  -t, --no-ticks        hide axis ticks [no]
+  -g, --grid            show grid [no]
+  -k, --key             show palette key [no]
+  -b, --black           set background black [white]
+  -p, --palette <name>  set color palette [rainbow]
+  -n, --negative        invert palette [no]
+  -f, --font <name>     set labels font [helvetica-12]
+  -c, --clip <name>     set clipping plane [none]
+Plot options:
+  -u, --using <string>  set columns in file for plot [1:2]
+  -w, --with <string>   set plot style [lines]
+  -s, --slice <string>  set lines in file for plot (from:to:stride) [all]
+  -3, --3D              perform 3D plot [no]
+  -v, --volume          show volume in 3D plot [surface]
+  -a, --alpha <string>  set surface transparency [1.0]
+Output options:
+  -o, --output <file>   output plot to file in EPS format [GLUT window]
+Help options:
+  -h, --help            display this help and exit
+  -V, --version         display version information and exit
+</verb></tscreen>
+
+<p>
+Common options are also changeable run-time by <tt>gluplot</tt> menu. 
+Menu is available in a top of a <tt>gluplot</tt> window in its GUI version or 
+by right mouse button otherwise. 
+
+<p>
+Other mouse functions are implemented for detailed plot considering. 
+For pure 2D plots, left mouse button is used for selecting region, 
+middle mouse button is used for moving selected fragment. 
+Clicking somewhere outside a plotting area returns the default view. 
+For 3D plots, left mouse button is used for rotation, clicking middle mouse button 
+returns the default orientation. 
+
+<sect1>API
+
+<p>
+Besides the command-line interface <tt>gluplot</tt> offers a library of C++ classes. 
+Its main approach is separating data treatment and visualization functionalities. 
+
+<p><img src="class_diagram.png">
+
+<p>
+All visualization is performed by plot class. 
+It contains what is to be plot - objects of the type curve, surface or label - 
+and provides axis that allow suitable auto-scale in a gnu-plot manner. 
+
+<p>
+Classes curve and surface are just containers for points. 
+Moreover, surface points are linked together in a mesh using bundle objects. 
+If user defines no mesh, surface provides automatic triangulation. 
+There are two algorithms: standard Delaunay triangulation on the x-y plane 
+gives a z=z(x,y) graph, and triangulation in a special coordinates gives a 
+surface bounded a volume. 
+
+<p>
+Top level window and fl_window classes are ready-to-use in applications, 
+like <tt>gluplot</tt> itself eg. 
+
+<p>
+The rest of <tt>gluplot</tt> classes - plot_traits, curve_traits and surface_traits - 
+are the storages for some graphical properties, such as color etc. 
+
+<sect2>2D example
+
+<p>
+The following example shows ho to plot data files.
+<tscreen><verb>
+#include "gluplot.h"
+using namespace glp;
+
+int main ( int argc, char** argv )
+{
+  gluplot pout;
+  pout.grid_visible ( true );
+
+  curve data = curve_from_file ( "test.dat", "1:2:3" );
+  curve fit = curve_from_file ( "test.fit" );
+
+  pout << YERRORBARS << data
+       << LINES << fit;
+
+  return 0;
+}
+</verb></tscreen>
+This short program produces the following plot.
+<p><img src="data_file.png">
+
+<sect2>3D example
+
+<p>
+The following program is an example of <tt>gluplot</tt> surface functionality.
+<tscreen><verb>
+#include "gluplot.h"
+using namespace glp;
+
+#include <iostream>
+#include <cstdlib>
+#include <cmath>
+using namespace std;
+
+const double func ( const double & x, const double & y )
+{
+  double arg = sqrt ( x*x + y*y );
+  return arg ? sin ( arg ) / arg : 1;
+}
+
+int main ( int argc, char** argv )
+{
+  if ( argc > 2 ) {
+    cerr << "Usage: " << argv[0] << " [npoints]" << endl;
+    return 1;
+  }
+
+  gluplot pout;
+
+  pout.key_visible ( true );
+
+  pout.background ( BLACK );
+  pout.foreground ( WHITE );
+
+  surface s;
+
+  int npoints = 1024;
+  if ( argc == 2 ) npoints = atoi ( argv[1] );
+
+  const double low = -10;
+  const double high = 10;
+  for ( int i = 0; i < npoints; ++i ) {
+    double x = low + ( high - low ) * (double) rand() / RAND_MAX;
+    double y = low + ( high - low ) * (double) rand() / RAND_MAX;
+    s.push_back ( point ( x, y, func ( x, y ) ) );
+  }
+
+  pout << COLORMAP << s;
+
+  return 0;
+}
+</verb></tscreen>
+And it gives the following with npoints = 1024.
+<p><img src="surface.png">
+
+<sect1>GUI
+
+<p>
+Besides the command-line interface <tt>gluplot</tt> offers an user friendly GUI 
+(graphical user interface). 
+Just start <tt>gluplot</tt> without parameters for using it.
+The main <tt>gluplot</tt> window in this case is looked as follows.
+<p><img src="gui.png">
+
+<p>
+All menu items exactly correspond to the command-line options described above. 
+
+<sect>Screenshots
+
+<p>
+Here are some more examples.  
+Most of them are included in <tt>gluplot</tt> distribution. 
+Screenshots below demonstrates: 
+mapping functions for rainbow pallete, 
+lighting plot style, 
+dynamic estimations of probability density, 
+visualizations used by another applications. 
+
+<p><img src="rainbow.png"><img src="sphere.png">
+<p><img src="parzen_1D.png"><img src="parzen_2D.png">
+<p><img src="loading.png"><img src="freezeout.png">
+
+
+</article>

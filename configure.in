@@ -1,0 +1,109 @@
+dnl -*- sh -*-
+dnl Process this file with autoconf to produce a configure script.
+
+dnl Required file in package...
+AC_INIT(src/main.cpp)
+
+dnl automake stuff here...
+AM_INIT_AUTOMAKE(gluplot, 1.9)
+AM_CONFIG_HEADER(config.h)
+
+dnl Find commands...
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_CXX
+AC_PROG_CXXCPP
+AC_PROG_RANLIB
+AC_PROG_INSTALL
+AM_PROG_LIBTOOL
+
+dnl Get the operating system...
+uname=`uname`
+if test "x$uname" = x; then
+    # MingW doesn't provide any output when uname is run, even with "-s"...
+    uname="CYGWIN"
+fi
+case $uname in
+    CYGWIN* | MINGW*)
+	# Cygwin environment...
+	AM_CONDITIONAL(MUSTDIE, true)
+	;;
+    *)
+	# UNIX environment...
+	AM_CONDITIONAL(MUSTDIE, false)
+	;;
+esac
+
+dnl Check for OpenGL/GLU/glut...
+LIBS=
+case $uname in
+    CYGWIN* | MINGW*)
+	# Cygwin environment...
+	LIBS="-lglut32 -lglu32 -lopengl32 $LIBS"
+	;;
+    *)
+	# UNIX environment...
+	AC_CHECK_HEADER(GL/gl.h,
+	    AC_CHECK_LIB(GL, glLoadIdentity, LIBS="-lGL $LIBS",
+		AC_CHECK_LIB(MesaGL, glLoadIdentity, LIBS="-lMesaGL $LIBS",
+		    AC_MSG_ERROR([this package requires OpenGL library]),
+		    -lm),
+		-lm),
+	    AC_MSG_ERROR([this package requires OpenGL library])
+	)
+	AC_CHECK_HEADER(GL/glu.h,
+	    AC_CHECK_LIB(GLU, gluOrtho2D, LIBS="-lGLU $LIBS",
+		AC_CHECK_LIB(MesaGLU, gluOrtho2D, LIBS="-lMesaGLU $LIBS",
+		    AC_MSG_ERROR([this package requires GLU library]),
+		    $LIBS -lm),
+		$LIBS -lm),
+	    AC_MSG_ERROR([this package requires GLU library])
+	)
+	AC_CHECK_HEADER(GL/glut.h,
+	    AC_CHECK_LIB(glut, glutMainLoop, LIBS="-lglut $LIBS",
+		AC_MSG_ERROR([this package requires glut library]),
+		$LIBS -lm),
+	    AC_MSG_ERROR([this package requires glut library])
+	)
+	;;
+esac
+
+dnl Check for FLTK (check for fltk-config script is enough)...
+# Handle FLTK option *first*, before all other tests.
+AC_ARG_ENABLE(fltk, [  --enable-fltk           use the FLTK libraries [[default=no]]])
+AM_CONDITIONAL(HAVE_FLTK, test "x$enable_fltk" = xyes)
+AM_CONDITIONAL(HAVE_XPM, false)
+if test "x$enable_fltk" = xyes; then
+    AC_CHECK_PROGS(FLTK, fltk-config, "")
+    AM_CONDITIONAL(HAVE_FLTK, test "x$FLTK" != x)
+    if test "x$FLTK" != x; then
+	fltk_includes=`fltk-config --cxxflags`
+	fltk_libraries=`fltk-config --ldflags --use-gl --use-glut --use-images`
+	AC_SUBST(fltk_includes)
+	AC_SUBST(fltk_libraries)
+	dnl Check for xpm...
+	AC_CHECK_HEADER(X11/xpm.h,
+	    AC_CHECK_LIB(Xpm, XpmCreatePixmapFromData,
+		AM_CONDITIONAL(HAVE_XPM, true),
+		AM_CONDITIONAL(HAVE_XPM, false)),
+	    AM_CONDITIONAL(HAVE_XPM, false)
+	    )
+    fi
+fi
+
+dnl Compiler options...
+CFLAGS="-Os -Wall"
+CXXFLAGS="-Os -Wall"
+LDFLAGS="$LIBS -lm -s"
+
+dnl Write makefiles...
+AC_OUTPUT( \
+Makefile \
+src/Makefile \
+src/plot/Makefile \
+src/gl2ps/Makefile \
+src/test/Makefile \
+src/icon/Makefile \
+docs/Makefile \
+docs/html/Makefile \
+)

@@ -1,0 +1,686 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0107 
+header_name {.h} 
+code_name {.cpp}
+decl {\#include "gluplot.h"} {public
+} 
+
+class glpUI {open
+} {
+  decl {bool _3D, _volume;} {}
+  decl {const char * colsopt;} {}
+  decl {const char * sliceopt;} {}
+  decl {bool _fullscreen;} {}
+  decl {int _x4fs, _y4fs, _w4fs, _h4fs;} {}
+  decl {bool _clipping;} {}
+  decl {const char *clipplane1, *clipplane2, *clipplane3, *clipplane4, *clipplane5} {}
+  declblock {\#ifdef WIN32} {public after {\#endif}
+  } {
+    decl {\#include "gluplotrc.h"} {}
+  }
+  declblock {\#if !defined (WIN32) && !defined(__APPLE__)} {open public after {\#endif}
+  } {
+    declblock {\#ifdef HAVE_XPM} {public after {\#endif}
+    } {
+      decl {\#include "gluplot.xpm"} {}
+      decl {\#include <X11/xpm.h>} {}
+    }
+    declblock {\#ifndef HAVE_XPM} {public after {\#endif}
+    } {
+      decl {\#include "gluplot.xbm"} {}
+    }
+  }
+  decl {\#include <FL/x.H>} {}
+  Function {glpUI()} {open
+  } {
+    code {_3D = _volume = false;
+colsopt = 0;
+sliceopt = 0;
+_fullscreen = false;
+_clipping = false;
+clipplane1 = clipplane2 = clipplane3 = clipplane4 = clipplane5 = 0;} {}
+    Fl_Window self {open
+      private xywh {328 21 640 505} type Double resizable
+      code0 {self->label("The Gluplot Plotting Package");} visible
+    } {
+      Fl_Group pout {
+        private xywh {0 25 640 480} when 1 resizable
+        class fluplot
+      } {}
+      Fl_Menu_Bar {} {
+        private xywh {0 0 640 25}
+      } {
+        Submenu {} {
+          label File
+          private xywh {0 0 100 20}
+        } {
+          MenuItem {} {
+            label Clear
+            callback {((glp::plot*)pout)->clear();
+pout->redraw();}
+            private xywh {0 0 30 20}
+          }
+          MenuItem {} {
+            label {Open...}
+            callback {Fl_File_Icon::load_system_icons();
+
+pout->xoffsets ( 0.05, 0.05 );
+pout->yoffsets ( 0.05, 0.05 );
+pout->xrotation ( 0.0 );
+pout->yrotation ( 0.0 );
+pout->zrotation ( 0.0 );
+
+char * filename = fl_file_chooser ( "Open File...", 0, 0 );
+if ( filename ) {
+  if ( _3D ) {
+    glp::surface s = glp::surface_from_file ( filename, colsopt, sliceopt );
+    if ( _volume ) s.triangulate_spherically ( true );
+    *pout << s;
+  } else {
+    glp::curve c = glp::curve_from_file ( filename, colsopt, sliceopt );
+    *pout << c;
+  }
+}
+
+pout->redraw();}
+            private xywh {0 0 100 20}
+            code0 {\#include <FL/Fl_File_Chooser.h>}
+            code1 {\#include <FL/Fl_File_Icon.H>}
+          }
+          MenuItem {} {
+            label {Save...}
+            callback {Fl_File_Icon::load_system_icons();
+
+char * filename = fl_file_chooser ( "Save File...", "All Supported Files(*.{ps,eps,tex,pdf,svg,pgf})", 0 );
+if ( filename ) {
+  pout->save ( filename );
+}}
+            private xywh {0 0 30 20}
+            code0 {\#include <FL/Fl_File_Chooser.h>}
+            code1 {\#include <FL/Fl_File_Icon.H>}
+          }
+          MenuItem {} {
+            label Exit
+            callback {exit(0);}
+            private xywh {0 0 100 20} shortcut 0xff1b
+            code0 {\#include <cstdlib>}
+          }
+        }
+        MenuItem {} {
+          label {Input...}
+          callback {input->show();}
+          private xywh {0 0 30 20}
+        }
+        Submenu {} {
+          label Style
+          private xywh {5 5 63 20}
+        } {
+          MenuItem {} {
+            label dots
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {5 5 30 20} type Radio
+          }
+          MenuItem style1 {
+            label lines
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {15 15 30 20} type Radio
+            code0 {o->setonly();}
+          }
+          MenuItem {} {
+            label points
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {25 25 30 20} type Radio
+          }
+          MenuItem {} {
+            label linespoints
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {35 35 30 20} type Radio
+          }
+          MenuItem {} {
+            label xerrorbars
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {45 45 30 20} type Radio
+          }
+          MenuItem {} {
+            label yerrorbars
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {55 55 30 20} type Radio
+          }
+          MenuItem {} {
+            label xyerrorbars
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {65 65 30 20} type Radio
+          }
+          MenuItem {} {
+            label xerrorlines
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {75 75 30 20} type Radio
+          }
+          MenuItem {} {
+            label yerrorlines
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {85 85 30 20} type Radio
+          }
+          MenuItem {} {
+            label xyerrorlines
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {95 95 30 20} type Radio
+          }
+          MenuItem {} {
+            label impulses
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {105 105 30 20} type Radio
+          }
+          MenuItem {} {
+            label coloredlines
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {115 115 30 20} type Radio
+          }
+          MenuItem style2 {
+            label colormap
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {125 125 30 20} type Radio
+          }
+          MenuItem {} {
+            label errorbars
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {55 55 30 20} type Radio
+          }
+          MenuItem {} {
+            label errorlines
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {85 85 30 20} type Radio
+          }
+          MenuItem {} {
+            label lighting
+            callback {pout->style ( glp::plot_style ( o->text() ) );
+pout->redraw();}
+            private xywh {95 95 30 20} type Radio
+          }
+        }
+        Submenu {} {
+          label Scale
+          private xywh {5 5 63 20}
+        } {
+          MenuItem {} {
+            label {logarithmic scale for x-axis}
+            callback {pout->xlog ( !pout->xlog() );
+pout->redraw();}
+            private xywh {10 10 30 20} type Toggle shortcut 0x78
+          }
+          MenuItem {} {
+            label {logarithmic scale for y-axis}
+            callback {pout->ylog ( !pout->ylog() );
+pout->redraw();}
+            private xywh {20 20 30 20} type Toggle shortcut 0x79
+          }
+          MenuItem {} {
+            label {logarithmic scale for z-axis}
+            callback {pout->zlog ( !pout->zlog() );
+pout->redraw();}
+            private xywh {30 30 30 20} type Toggle shortcut 0x7a
+          }
+        }
+        Submenu {} {
+          label Decor
+          private xywh {5 5 63 20}
+        } {
+          MenuItem {} {
+            label autoscale
+            callback {pout->xoffsets ( 0.05, 0.05 );
+pout->yoffsets ( 0.05, 0.05 );
+pout->redraw();}
+            private xywh {5 5 30 20} shortcut 0x61
+          }
+          MenuItem {} {
+            label ticks
+            callback {pout->ticks_visible ( !pout->ticks_visible() );
+pout->redraw();}
+            private xywh {10 10 30 20} type Toggle shortcut 0x74
+          }
+          MenuItem {} {
+            label grid
+            callback {pout->grid_visible ( !pout->grid_visible() );
+pout->redraw();}
+            private xywh {10 10 30 20} type Toggle shortcut 0x67
+          }
+          MenuItem {} {
+            label key
+            callback {pout->key_visible ( !pout->key_visible() );
+pout->redraw();}
+            private xywh {10 10 30 20} type Toggle shortcut 0x6b
+          }
+          MenuItem {} {
+            label {common style}
+            callback {pout->style_visible ( !pout->style_visible() );
+pout->redraw();}
+            private xywh {5 5 30 20} type Toggle shortcut 0x63
+          }
+          MenuItem {} {
+            label {background...}
+            callback {double r = pout->background().r();
+double g = pout->background().g();
+double b = pout->background().b();
+if ( fl_color_chooser ( "Background color", r, g, b ) ) {
+  pout->background ( glp::color ( r, g, b ) );
+}}
+            private xywh {0 0 30 20}
+            code0 {\#include <FL/Fl_Color_Chooser.H>}
+          }
+          MenuItem {} {
+            label {foreground...}
+            callback {double r = (double)pout->foreground().r;
+double g = (double)pout->foreground().g;
+double b = (double)pout->foreground().b;
+if ( fl_color_chooser ( "Foreground color", r, g, b ) ) {
+  pout->foreground ( glp::color ( r, g, b ) );
+}}
+            private xywh {10 10 30 20}
+            code0 {\#include <FL/Fl_Color_Chooser.H>}
+          }
+          MenuItem {} {
+            label negative
+            callback {pout->negative ( !pout->negative() );
+pout->redraw();}
+            private xywh {10 10 30 20} type Toggle shortcut 0x6e
+          }
+          MenuItem {} {
+            label fullscreen
+            callback {_fullscreen = !_fullscreen;
+if ( _fullscreen ) {
+  _x4fs = self->x();
+  _y4fs = self->y();
+  _w4fs = self->w();
+  _h4fs = self->h();
+  self->fullscreen();
+} else {
+  self->fullscreen_off ( _x4fs, _y4fs, _w4fs, _h4fs );
+}}
+            private xywh {5 5 30 20} type Toggle shortcut 0x66
+          }
+          MenuItem {} {
+            label {clipping...}
+            callback {clipping->show();}
+            xywh {0 0 30 20}
+          }
+        }
+        Submenu {} {
+          label Color
+          private xywh {15 15 63 20}
+        } {
+          MenuItem {} {
+            label rainbow
+            callback {pout->rgbscheme ( glp::color_scheme ( o->text() ) );
+pout->redraw();}
+            private xywh {15 15 30 20} type Radio
+            code0 {o->set();}
+          }
+          MenuItem {} {
+            label hot
+            callback {pout->rgbscheme ( glp::color_scheme ( o->text() ) );
+pout->redraw();}
+            private xywh {25 25 30 20} type Radio
+          }
+          MenuItem {} {
+            label ocean
+            callback {pout->rgbscheme ( glp::color_scheme ( o->text() ) );
+pout->redraw();}
+            private xywh {35 35 30 20} type Radio
+          }
+          MenuItem {} {
+            label terrain
+            callback {pout->rgbscheme ( glp::color_scheme ( o->text() ) );
+pout->redraw();}
+            private xywh {45 45 30 20} type Radio
+          }
+          MenuItem {} {
+            label traditional
+            callback {pout->rgbscheme ( glp::color_scheme ( o->text() ) );
+pout->redraw();}
+            private xywh {55 55 30 20} type Radio
+          }
+          MenuItem {} {
+            label grayscale
+            callback {pout->rgbscheme ( glp::color_scheme ( o->text() ) );
+pout->redraw();}
+            private xywh {65 65 30 20} type Radio
+          }
+        }
+        Submenu {} {
+          label Font
+          private xywh {20 20 63 20}
+        } {
+          MenuItem {} {
+            label 8x13
+            callback {pout->font ( glp::text_font ( o->text() ) );
+pout->redraw();}
+            private xywh {25 25 30 20} type Radio
+          }
+          MenuItem {} {
+            label 9x15
+            callback {pout->font ( glp::text_font ( o->text() ) );
+pout->redraw();}
+            private xywh {35 35 30 20} type Radio
+          }
+          MenuItem {} {
+            label {helvetica-10}
+            callback {pout->font ( glp::text_font ( o->text() ) );
+pout->redraw();}
+            private xywh {45 45 30 20} type Radio
+          }
+          MenuItem {} {
+            label {helvetica-12}
+            callback {pout->font ( glp::text_font ( o->text() ) );
+pout->redraw();}
+            private xywh {65 65 30 20} type Radio
+            code0 {o->setonly();}
+          }
+          MenuItem {} {
+            label {helvetica-18}
+            callback {pout->font ( glp::text_font ( o->text() ) );
+pout->redraw();}
+            private xywh {75 75 30 20} type Radio
+          }
+          MenuItem {} {
+            label {times-roman-10}
+            callback {pout->font ( glp::text_font ( o->text() ) );
+pout->redraw();}
+            private xywh {85 85 30 20} type Radio
+          }
+          MenuItem {} {
+            label {times-roman-24}
+            callback {pout->font ( glp::text_font ( o->text() ) );
+pout->redraw();}
+            private xywh {30 30 30 20} type Radio
+          }
+        }
+        Submenu {} {
+          label Help
+          private xywh {0 0 63 20}
+        } {
+          MenuItem {} {
+            label {About...}
+            callback {string msg;
+\#ifdef HAVE_CONFIG_H
+\#include <config.h>
+msg += PACKAGE;
+msg += " ";
+msg += VERSION;
+msg += "\\n";
+\#else
+msg += "Author:\\n";
+\#endif
+msg += "(c) 2004-2007, Alexei Soloviev";
+msg += "\\n";
+msg += "solovjev@@cv.jinr.ru";
+fl_message ( msg.c_str() );}
+            private xywh {15 15 100 20}
+            code0 {\#include <FL/fl_ask.H>}
+            code1 {\#include <string>}
+          }
+          MenuItem {} {
+            label {Manual...}
+            callback {\#ifdef HAVE_CONFIG_H
+\#include <config.h>
+
+const char * docdir;
+
+if ((docdir = getenv("DOCDIR")) == NULL) {
+  docdir = DOCDIR;
+}
+
+char helpname[1024];
+snprintf(helpname, sizeof(helpname), "%s/%s", docdir, "index.html");  
+
+static Fl_Help_Dialog help_dialog;
+help_dialog.load(helpname);
+help_dialog.show();
+
+\#endif}
+            private xywh {0 0 30 20}
+            code1 {\#include <FL/Fl_Help_Dialog.H>}
+          }
+        }
+      }
+    }
+    Fl_Window input {
+      label Input open
+      private xywh {332 412 220 105} type Double modal visible
+    } {
+      Fl_Menu_Bar {} {
+        xywh {0 0 220 24} box FLAT_BOX
+      } {
+        MenuItem {} {
+          label 3D
+          callback {_3D = !_3D;
+if ( _3D ) {
+  vol->activate();
+  style2->setonly();
+  pout->style ( glp::plot_style ( style2->label() ) );
+  pout->redraw();
+} else {
+  vol->deactivate();
+  style1->setonly();
+  pout->style ( glp::plot_style ( style1->label() ) );
+  pout->redraw();
+}}
+          private xywh {10 10 30 20} type Toggle shortcut 0x33
+        }
+        MenuItem vol {
+          label Volume
+          callback {_volume = !_volume;}
+          private xywh {20 20 30 20} type Toggle shortcut 0x33 deactivate
+        }
+      }
+      Fl_Group {} {
+        private xywh {0 26 427 49}
+      } {
+        Fl_Input icols {
+          label {Columns:}
+          private xywh {65 26 150 24}
+          code0 {o->value(colsopt);}
+        }
+        Fl_Input islice {
+          label {Lines:}
+          private xywh {65 51 150 24}
+          code0 {o->value(sliceopt);}
+        }
+      }
+      Fl_Group {} {
+        private xywh {5 75 210 25}
+      } {
+        Fl_Return_Button {} {
+          label OK
+          callback {if ( icols->value() && icols->value() != "" ) {
+  const string str ( icols->value() );
+  const unsigned int waste = count_if ( str.begin(), str.end(), not1 ( ptr_fun ( ::isdigit ) ) );
+  static const char delimiter = ':';
+  unsigned int ncols = count ( str.begin(), str.end(), delimiter );
+  if ( ncols == waste ) ++ncols;
+  else ncols = 0;
+  if ( _3D ) {
+    if ( ncols != 3 && ncols != 6 ) {
+      fl_message ( "Columns: expecting 'x:y:z' or 'x:y:z:dx:dy:dz'" );
+      return;
+    }
+  } else {
+    if ( ncols < 1 || ncols > 4 ) {
+      fl_message ( "Columns: expecting 'x:y', 'x:y:dy', 'x:y:dy:dx' or just 'y'" );
+      return;
+    }
+  }
+  colsopt = icols->value();
+}
+
+if ( islice->value() && islice->value() != "" ) {
+  const string str ( islice->value() );
+  const unsigned int waste = count_if ( str.begin(), str.end(), not1 ( ptr_fun ( ::isdigit ) ) );
+  static const char delimiter = ':';
+  unsigned int ncols = count ( str.begin(), str.end(), delimiter );
+  if ( ncols == waste ) ++ncols;
+  else ncols = 0;
+  if ( ncols != 3 ) {
+    fl_message ( "Lines: expecting 'from:to:stride'" );
+    return;
+  }
+  sliceopt = islice->value();
+}
+
+input->hide();}
+          private xywh {151 80 64 20} shortcut 0xff0d
+          code0 {\#include <FL/fl_ask.H>}
+          code1 {\#include <string>}
+          code2 {\#include <cctype>}
+          code3 {\#include <algorithm>}
+        }
+        Fl_Button {} {
+          label Cancel
+          callback {icols->value(colsopt);
+islice->value(sliceopt);
+input->hide();}
+          private xywh {81 80 64 20} shortcut 0xff1b
+        }
+        Fl_Button {} {
+          label Clear
+          callback {icols->value(0);
+islice->value(0);}
+          private xywh {10 80 64 20} shortcut 0xffff
+        }
+      }
+    }
+    Fl_Window clipping {
+      label Clipping open
+      private xywh {640 338 325 180} type Double modal visible
+    } {
+      Fl_Menu_Bar {} {
+        private xywh {0 0 370 20} box FLAT_BOX
+      } {
+        MenuItem {} {
+          label Clipping
+          callback {_clipping = !_clipping;}
+          private xywh {0 0 30 20} type Toggle
+        }
+      }
+      Fl_Group {} {
+        private xywh {110 150 210 25}
+      } {
+        Fl_Return_Button {} {
+          label OK
+          callback {glp::point dir1, dir2, dir3, dir4, dir5;
+double pos1, pos2, pos3, pos4, pos5;
+
+clipplane1 = clip1->value();
+clipplane2 = clip2->value();
+clipplane3 = clip3->value();
+clipplane4 = clip4->value();
+clipplane5 = clip5->value();
+
+if ( clipplane1 && clipplane1 != "" ) {
+  glp::plane_from_str ( clipplane1, dir1, pos1 );
+  pout->clip ( dir1, pos1 );
+}
+if ( clipplane2 && clipplane2 != "" ) {
+  glp::plane_from_str ( clipplane2, dir2, pos2 );
+  pout->clip ( dir2, pos2 );
+}
+if ( clipplane3 && clipplane3 != "" ) {
+  glp::plane_from_str ( clipplane3, dir3, pos3 );
+  pout->clip ( dir3, pos3 );
+}
+if ( clipplane4 && clipplane4 != "" ) {
+  glp::plane_from_str ( clipplane4, dir4, pos4 );
+  pout->clip ( dir4, pos4 );
+}
+if ( clipplane5 && clipplane5 != "" ) {
+  glp::plane_from_str ( clipplane5, dir5, pos5 );
+  pout->clip ( dir5, pos5 );
+}
+
+pout->clipping(_clipping);
+
+clipping->hide();}
+          private xywh {256 155 64 20} shortcut 0xff0d
+          code0 {\#include <FL/fl_ask.H>}
+          code3 {\#include <iostream>}
+        }
+        Fl_Button {} {
+          label Cancel
+          callback {clipping->hide();}
+          private xywh {186 155 64 20} shortcut 0xff1b
+        }
+        Fl_Button {} {
+          label Clear
+          callback {clip1->value(0);
+clip2->value(0);
+clip3->value(0);
+clip4->value(0);
+clip5->value(0);}
+          private xywh {115 155 64 20} shortcut 0xffff
+        }
+      }
+      Fl_Group {} {
+        private xywh {0 27 320 123}
+      } {
+        Fl_Input clip1 {
+          label {clipping plane:}
+          private xywh {100 27 220 23}
+          code0 {o->value(clipplane1);}
+        }
+        Fl_Input clip2 {
+          label {clipping plane:}
+          private xywh {100 51 220 24}
+          code0 {o->value(clipplane2);}
+        }
+        Fl_Input clip3 {
+          label {clipping plane:}
+          private xywh {100 76 220 24}
+          code0 {o->value(clipplane3);}
+        }
+        Fl_Input clip4 {
+          label {clipping plane:}
+          private xywh {100 101 220 24}
+          code0 {o->value(clipplane4);}
+        }
+        Fl_Input clip5 {
+          label {clipping plane:}
+          private xywh {100 126 220 24}
+          code0 {o->value(clipplane5);}
+        }
+      }
+    }
+    code {// Set icon for window (MacOS uses app bundle for icon...)
+\#ifdef WIN32
+  self->icon((char *)LoadIcon(fl_display, MAKEINTRESOURCE(IDI_ICON)));
+\#elif !defined(__APPLE__)
+  fl_open_display();
+\#ifdef HAVE_XPM
+  Pixmap p, mask;
+  XpmCreatePixmapFromData(fl_display, DefaultRootWindow(fl_display),
+                          gluplot_xpm, &p, &mask, NULL);
+\#else // HAVE_XPM
+  Pixmap p = XCreateBitmapFromData(fl_display, DefaultRootWindow(fl_display),
+                                   (char *)gluplot_bits, gluplot_width, gluplot_height);
+\#endif // HAVE_XPM
+  self->icon((char *)p);
+\#endif // WIN32} {}
+  }
+  Function {show(int argc, char**argv)} {open
+  } {
+    code {self->show(argc,argv);} {}
+  }
+} 
